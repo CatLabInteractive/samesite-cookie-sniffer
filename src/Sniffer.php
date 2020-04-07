@@ -43,8 +43,16 @@ class Sniffer
      */
     public function setSessionCookieParameters($parameters = [])
     {
+        $parameters = $this->getCookieParameters($parameters);
+        if (isset($parameters['expires'])) {
+            unset($parameters['expires']);
+        }
+
+        $parameters['lifetime'] = isset($parameters['lifetime']) ? $parameters['lifetime'] : 0;
+
+
         // preparing for the end of the cookie world
-        session_set_cookie_params($this->getCookieParameters($parameters));
+        session_set_cookie_params($parameters);
     }
 
     /**
@@ -53,7 +61,7 @@ class Sniffer
      */
     public function getCookieParameters($parameters = [])
     {
-        $lifetime = isset($parameters['lifetime']) ? $parameters['lifetime'] : 0;
+        $expires = isset($parameters['expires']) ? $parameters['expires'] : 0;
         $httponly = isset($parameters['httponly']) ? $parameters['httponly'] : true;
         $secure = isset($parameters['secure']) ? $parameters['secure'] : true;
         $samesite = isset($parameters['samesite']) ? $parameters['samesite'] : 'None';
@@ -62,7 +70,7 @@ class Sniffer
         $shouldSendSameSiteNone = SameSite::handle($this->agentString);
 
         $parameters = [
-            'lifetime' => $lifetime,
+            'expires' => $expires,
             'httponly' => $httponly,
             'secure' => $secure && $this->isSecureConnection(),
         ];
