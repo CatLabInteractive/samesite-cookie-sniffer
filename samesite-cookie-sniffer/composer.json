@@ -1,0 +1,21 @@
+{
+    "name": "catlabinteractive/samesite-cookie-sniffer",
+    "description": "Helper class to determine which cookie attributes to set.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thijs Van der Schaeghe",
+            "email": "hello@catlab.be"
+        }
+    ],
+    "require": {
+        "skorp/detect-incompatible-samesite-useragents": "^1.0"
+    },
+
+    "autoload": {
+        "psr-4" : {
+            "CatLab\\SameSiteCookieSniffer\\" : "src/"
+        }
+    }
+}
