@@ -69,13 +69,15 @@ class Sniffer
         // Is SameSite compatible?
         $shouldSendSameSiteNone = SameSite::handle($this->agentString);
 
+        $secure = $secure && $this->isSecureConnection();
+
         $parameters = [
             'expires' => $expires,
             'httponly' => $httponly,
-            'secure' => $secure && $this->isSecureConnection(),
+            'secure' => $secure,
         ];
 
-        if ($shouldSendSameSiteNone) {
+        if ($shouldSendSameSiteNone && $secure) {
             $parameters['samesite'] = $samesite;
         }
 
