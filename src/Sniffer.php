@@ -71,17 +71,17 @@ class Sniffer
 
         $secure = $secure && $this->isSecureConnection();
 
-        $parameters = [
+        $cookieParameters = [
             'expires' => $expires,
             'httponly' => $httponly,
             'secure' => $secure,
         ];
 
         if ($shouldSendSameSiteNone && $secure) {
-            $parameters['samesite'] = $samesite;
+            $cookieParameters['samesite'] = $samesite;
         }
 
-        return $parameters;
+        return array_merge($parameters, $cookieParameters);
     }
 
     /**
