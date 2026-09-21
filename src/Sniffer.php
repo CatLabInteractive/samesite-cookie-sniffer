@@ -34,8 +34,9 @@ class Sniffer
     public function __construct($agentString = null)
     {
         if ($agentString === null && isset($_SERVER['HTTP_USER_AGENT'])) {
-            $this->agentString = $_SERVER['HTTP_USER_AGENT'];
+            $agentString = $_SERVER['HTTP_USER_AGENT'];
         }
+        $this->agentString = $agentString;
     }
 
     /**
@@ -66,8 +67,14 @@ class Sniffer
         $secure = isset($parameters['secure']) ? $parameters['secure'] : true;
         $samesite = isset($parameters['samesite']) ? $parameters['samesite'] : 'None';
 
-        // Is SameSite compatible?
-        $shouldSendSameSiteNone = SameSite::handle($this->agentString);
+        // Is SameSite compatible? Without a User-Agent (CLI, health checks)
+        // there is nothing to sniff: send it, which is what the check itself
+        // returned for a null agent before PHP 8.1 deprecated passing null
+        // to preg_match().
+        $shouldSendSameSiteNone = true;
+        if (is_string($this->agentString) && $this->agentString !== '') {
+            $shouldSendSameSiteNone = SameSite::handle($this->agentString);
+        }
 
         $secure = $secure && $this->isSecureConnection();
 
