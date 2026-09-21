@@ -12,10 +12,17 @@
     "require": {
         "skorp/detect-incompatible-samesite-useragents": "^1.0"
     },
-
     "autoload": {
-        "psr-4" : {
-            "CatLab\\SameSiteCookieSniffer\\" : "src/"
+        "psr-4": {
+            "CatLab\\SameSiteCookieSniffer\\": "src/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.6 || ^10.0 || ^11.0"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CatLab\\SameSiteCookieSniffer\\Tests\\": "tests/"
         }
     }
 }

@@ -1,0 +1,36 @@
+name: Tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ['7.4', '8.5']
+
+    name: PHP ${{ matrix.php-version }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: none
+
+      # The lock is resolved on 7.4; let newer PHP pick its own PHPUnit.
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-progress
+
+      - name: Run tests
+        run: vendor/bin/phpunit
